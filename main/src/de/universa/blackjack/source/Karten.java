@@ -1,5 +1,9 @@
 package de.universa.blackjack.source;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Karten {
 
     private final Karte[] karten = {new Karte(2, "2"), new Karte(3, "3"), new Karte(4, "4"),
@@ -8,29 +12,42 @@ public class Karten {
                                 new Karte(10, "Bube"), new Karte(10, "Dame"), new Karte(10, "König"),
                                 new Karte(11, "Ass")};
 
+    private List<Karte> kartenDeck = new ArrayList<>();
+
     public Karten(){ }
 
     public void gebeKartenaus(Spieler spieler){
         System.out.print(spieler.getName() + " hat folgende Karten: ");
-       for(int kartenIndex : spieler.getErhalteneKarten()){
-           System.out.print(getKarteByIndex(kartenIndex).getName() + " ");
+       for(Karte karte : spieler.getErhalteneKarten()){
+           System.out.print(karte.getName() + " ");
        }
         System.out.println();
     }
 
-    public void setzeKartenzurueck(Spieler[] spielerarray, Spieler croupier){
-        for(Spieler spieler : spielerarray){
-            spieler.setErhalteneKarten(new int[0]);
+    public void erstellekartenDeck(){
+        for(int i = 0; i < 6; i++){
+            for(int j = 0; j < 4; j++){
+                for(int k = 0; k < getKarten().length; k++){
+                    getKartenDeck().add(getKarten()[k]);
+                }
+            }
         }
-        croupier.setErhalteneKarten(new int[0]);
+        Collections.shuffle(getKartenDeck());
     }
 
-    public int errechneKartenWert(int[] gezogeneKartenIndex){
+    public void setzeKartenzurueck(Spieler[] spielerarray, Spieler croupier){
+        for(Spieler spieler : spielerarray){
+            spieler.setErhalteneKarten(new Karte[0]);
+        }
+        croupier.setErhalteneKarten(new Karte[0]);
+    }
+
+    public int errechneKartenWert(Karte[] gezogeneKartenIndex){
         int kartenWert = 0;
         int merkeWert;
         int assgemerkt = 0;
-        for(int index : gezogeneKartenIndex){
-            merkeWert = getKarteByIndex(index).getWert();
+        for(Karte karte : gezogeneKartenIndex){
+            merkeWert = karte.getWert();
             if(merkeWert == 11){
                 assgemerkt++;
             }
@@ -42,12 +59,12 @@ public class Karten {
         return kartenWert;
     }
 
-    public int errechneKartenWertCroupier(int[] gezogeneKartenIndex){
+    public int errechneKartenWertCroupier(Karte[] gezogeneKartenIndex){
         int kartenWert = 0;
         int merkeWert;
         int assgemerkt = 0;
-        for(int index : gezogeneKartenIndex){
-            merkeWert = getKarteByIndex(index).getWert();
+        for(Karte karte : gezogeneKartenIndex){
+            merkeWert = karte.getWert();
             if(merkeWert == 11){
                 assgemerkt++;
             }
@@ -63,20 +80,11 @@ public class Karten {
         return kartenWert;
     }
 
-    private Karte getKarteByIndex(int index){ return getKarten()[index]; }
-    private Karte[] getKarten(){ return karten; }
-}
-
-
-class Karte{
-    private final String name;
-    private final int wert;
-
-    public Karte( int wert, String name) {
-        this.name = name;
-        this.wert = wert;
+    public Karte getNextKarte(){
+        Karte nextKarte = getKartenDeck().get(0);
+        getKartenDeck().remove(0);
+        return nextKarte;
     }
-
-    public String getName() { return name; }
-    public int getWert() { return wert; }
+    private Karte[] getKarten(){ return karten; }
+    public List<Karte> getKartenDeck() { return kartenDeck; }
 }

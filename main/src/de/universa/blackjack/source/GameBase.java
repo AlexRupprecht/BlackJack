@@ -90,6 +90,7 @@ public class GameBase {
                         gebeKartenWertaus(spieler);
                         System.out.println("Du bist leider ausgeschieden!");
                     }
+                    Helper.warteAufEingabe();
                     spieler.setAusgeschieden(true);
                     spielzugBeendet = true;
                 }
@@ -151,17 +152,18 @@ public class GameBase {
     }
 
     private void teileKarteaus(Spieler spieler, int anzahlRunde){
-        int[] kartenerhalten = new int[anzahlRunde];
+        Karte[] kartenerhalten = new Karte[anzahlRunde];
         int zaehler = 0;
         if(anzahlRunde != 1) {
-            for (int index : spieler.getErhalteneKarten()) {
-                if (index != -1) {
-                    kartenerhalten[zaehler] = index;
+            for (Karte karte : spieler.getErhalteneKarten()) {
+                    kartenerhalten[zaehler] = karte;
                     zaehler++;
-                }
             }
         }
-        kartenerhalten[zaehler] = getKarteID();
+        if(getKarten().getKartenDeck().isEmpty()){
+            getKarten().erstellekartenDeck();
+        }
+        kartenerhalten[zaehler] = getKarten().getNextKarte();
         spieler.setErhalteneKarten(kartenerhalten);
     }
 
@@ -192,6 +194,8 @@ public class GameBase {
         spieler.setKontostand(spieler.getKontostand() + spieler.getGestezterWert());
         spieler.setGewinn(spieler.getGewinn() + spieler.getGestezterWert());
         spieler.setGewonnen(true);
+        getKarten().gebeKartenaus(spieler);
+        gebeKartenWertaus(spieler);
     }
 
     private void gebeKartenWertaus(Spieler spieler){

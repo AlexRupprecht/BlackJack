@@ -47,11 +47,11 @@ public class Spielregeln {
         return isKartenWertUnter21(spieler.getErhalteneKarten(), karten);
     }
 
-    public boolean isKartenWertUnter21(int[] gezogeneKarten, Karten karten){
+    public boolean isKartenWertUnter21(Karte[] gezogeneKarten, Karten karten){
         return karten.errechneKartenWert(gezogeneKarten) < 21;
     }
 
-    public boolean isKartenWertUnter17(int[] gezogeneKarten, Karten karten){
+    public boolean isKartenWertUnter17(Karte[] gezogeneKarten, Karten karten){
         return karten.errechneKartenWertCroupier(gezogeneKarten) < 17;
     }
 }

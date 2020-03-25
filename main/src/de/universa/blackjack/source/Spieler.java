@@ -5,7 +5,7 @@ public class Spieler {
     private double kontostand;
     private double gewinn = 0;
     private String name;
-    private int[] erhalteneKarten;
+    private Karte[] erhalteneKarten;
     private double gestezterWert;
     private boolean ausgeschieden = false;
     private boolean gewonnen = false;
@@ -22,12 +22,12 @@ public class Spieler {
         }
     }
 
-    public Spieler(int[] erhalteneKarten){ this.erhalteneKarten = erhalteneKarten; }
+    public Spieler(Karte[] erhalteneKarten){ this.erhalteneKarten = erhalteneKarten; }
     public double getKontostand() {
         return kontostand;
     }
-    public int[] getErhalteneKarten() { return erhalteneKarten; }
-    public void setErhalteneKarten(int[] erhalteneKarten) { this.erhalteneKarten = erhalteneKarten; }
+    public Karte[] getErhalteneKarten() { return erhalteneKarten; }
+    public void setErhalteneKarten(Karte[] erhalteneKarten) { this.erhalteneKarten = erhalteneKarten; }
     public void setKontostand(double kontostand) {
         this.kontostand = kontostand;
     }

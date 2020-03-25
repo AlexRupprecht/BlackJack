@@ -1,5 +1,6 @@
 package de.universa.blackjack.test;
 
+import de.universa.blackjack.source.Karte;
 import de.universa.blackjack.source.Karten;
 import de.universa.blackjack.source.Spieler;
 import de.universa.blackjack.source.Spielregeln;
@@ -46,42 +47,42 @@ public class SpielregelnTest {
 
     @Test
     public void isAllowToPullACardPlayerTest(){
-        int[] erhalteneKarten = {5, 6};
+        Karte[] erhalteneKarten = {new Karte(5, "5"), new Karte(6, "6")};
         Spieler spieler = new Spieler(erhalteneKarten);
         Assert.assertTrue(regeln.isAllowToPullACardPlayer(spieler, new Karten()));
     }
 
     @Test
     public void isNotAllowToPullACardPlayerTest(){
-        int[] erhalteneKarten = {10, 9, 10};
+        Karte[] erhalteneKarten = {new Karte(10, "10"), new Karte(9, "9"), new Karte(10, "10")};
         Spieler spieler = new Spieler(erhalteneKarten);
         Assert.assertFalse(regeln.isAllowToPullACardPlayer(spieler, new Karten()));
     }
 
     @Test
     public void isKartenWertUnter21Test(){
-        int[] erhalteneKarten = {7, 7};
+        Karte[] erhalteneKarten = {new Karte(7, "7"), new Karte(7, "7")};
         Karten karten = new Karten();
         Assert.assertTrue(regeln.isKartenWertUnter21(erhalteneKarten, karten));
     }
 
     @Test
     public void isNotKartenWertUnter21Test(){
-        int[] erhalteneKarten = {10, 9, 10};
+        Karte[] erhalteneKarten = {new Karte(10, "Bube"), new Karte(9, "9"), new Karte(10, "Bube")};
         Karten karten = new Karten();
         Assert.assertFalse(regeln.isKartenWertUnter21(erhalteneKarten, karten));
     }
 
     @Test
     public void isKartenWertUnter17Test(){
-        int[] erhalteneKarten = {5, 6};
+        Karte[] erhalteneKarten = {new Karte(5, "5"), new Karte(6, "6")};
         Karten karten = new Karten();
         Assert.assertTrue(regeln.isKartenWertUnter17(erhalteneKarten, karten));
     }
 
     @Test
     public void isNotKartenWertUnter17Test(){
-        int[] erhalteneKarten = {9, 9};
+        Karte[] erhalteneKarten = {new Karte(9, "9"), new Karte(9, "9")};
         Karten karten = new Karten();
         Assert.assertFalse(regeln.isKartenWertUnter17(erhalteneKarten, karten));
     }

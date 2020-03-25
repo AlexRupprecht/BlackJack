@@ -64,7 +64,6 @@ public class Karten {
     }
 
     private Karte getKarteByIndex(int index){ return getKarten()[index]; }
-
     private Karte[] getKarten(){ return karten; }
 }
 
@@ -79,6 +78,5 @@ class Karte{
     }
 
     public String getName() { return name; }
-
     public int getWert() { return wert; }
 }

@@ -86,6 +86,8 @@ public class GameBase {
                             alreadyWon(spieler);
                         }
                     }else {
+                        getKarten().gebeKartenaus(spieler);
+                        gebeKartenWertaus(spieler);
                         System.out.println("Du bist leider ausgeschieden!");
                     }
                     spieler.setAusgeschieden(true);
@@ -121,6 +123,7 @@ public class GameBase {
 
     private void zeigeGewinnerAn(){
         int anzahlGewinner = 0;
+        Helper.cleanBildschrim();
         System.out.println("Der Croupier hatte einen Kartenwert von: " + getKarten().errechneKartenWertCroupier(getCroupier().getErhalteneKarten()));
         System.out.println("Gewonnen hat:");
         for(Spieler spieler : spielerArray){
@@ -167,7 +170,6 @@ public class GameBase {
             for(Spieler spieler : getSpielerArray()){
                 teileKarteaus(spieler, i+1);
             }
-
         }
         teileKarteaus(getCroupier(), 1);
     }
@@ -192,6 +194,10 @@ public class GameBase {
         spieler.setGewonnen(true);
     }
 
+    private void gebeKartenWertaus(Spieler spieler){
+        System.out.println("Dein Kartenwert beträgt: " + getKarten().errechneKartenWert(spieler.getErhalteneKarten()));
+    }
+
     //Eingaben
     private boolean entscheideKarteZiehen(Spieler spieler){
         boolean eingabeKorrekt = true;
@@ -200,8 +206,11 @@ public class GameBase {
             if(!eingabeKorrekt){
                 System.out.println("Es ist nur \"H\" oder \"S\" erlaubt!");
             }
+            if(!spieler.equals(getCroupier())) {
+                getKarten().gebeKartenaus(getCroupier());
+            }
             getKarten().gebeKartenaus(spieler);
-            System.out.println("Dein Kartenwert beträgt: " + getKarten().errechneKartenWert(spieler.getErhalteneKarten()));
+            gebeKartenWertaus(spieler);
             System.out.println();
             System.out.println("Möchtest du noch einmal ziehen[h] oder es sein lassen[s]:");
             eingabe = scan.next();
@@ -224,6 +233,7 @@ public class GameBase {
             setSpieleinsaetzeGelegt(getSpieleinsaetzeGelegt() + zusetzenderWert);
             spieler.setGestezterWert(zusetzenderWert);
             spieler.setKontostand(spieler.getKontostand() - spieler.getGestezterWert());
+            Helper.cleanBildschrim();
         }
     }
 
@@ -268,9 +278,7 @@ public class GameBase {
     public double getSpieleinsaetzeGelegt() {
         return spieleinsaetzeGelegt;
     }
-    public void setSpieleinsaetzeGelegt(double spieleinsaetzeGelegt) {
-        this.spieleinsaetzeGelegt = spieleinsaetzeGelegt;
-    }
+    public void setSpieleinsaetzeGelegt(double spieleinsaetzeGelegt) { this.spieleinsaetzeGelegt = spieleinsaetzeGelegt; }
     public int getMaxPlayers() {
         return maxPlayers;
     }

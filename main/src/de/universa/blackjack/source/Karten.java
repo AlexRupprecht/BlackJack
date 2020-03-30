@@ -11,8 +11,9 @@ public class Karten {
                                 new Karte(8, "8"), new Karte(9, "9"), new Karte(10, "10"),
                                 new Karte(10, "Bube"), new Karte(10, "Dame"), new Karte(10, "König"),
                                 new Karte(11, "Ass")};
-
     private List<Karte> kartenDeck = new ArrayList<>();
+
+    private Karte[] kartenTest = {new Karte(7, "7"), new Karte(7, "7")};
 
     public Karten(){ }
 
@@ -85,6 +86,19 @@ public class Karten {
         getKartenDeck().remove(0);
         return nextKarte;
     }
-    private Karte[] getKarten(){ return karten; }
+    public Karte[] getKarten(){ return karten; }
     public List<Karte> getKartenDeck() { return kartenDeck; }
+    public Karte[] getKartenTest() { return kartenTest; }
+}
+class Karte {
+    private final String name;
+    private final int wert;
+
+    public Karte( int wert, String name) {
+        this.name = name;
+        this.wert = wert;
+    }
+
+    public String getName() { return name; }
+    public int getWert() { return wert; }
 }

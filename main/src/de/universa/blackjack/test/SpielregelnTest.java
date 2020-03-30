@@ -1,6 +1,5 @@
 package de.universa.blackjack.test;
 
-import de.universa.blackjack.source.Karte;
 import de.universa.blackjack.source.Karten;
 import de.universa.blackjack.source.Spieler;
 import de.universa.blackjack.source.Spielregeln;
@@ -10,9 +9,14 @@ import org.junit.Test;
 
 public class SpielregelnTest {
     Spielregeln regeln;
+    Karten karten;
+    Spieler spieler;
+
     @Before
     public void init(){
          regeln = new Spielregeln();
+         spieler = new Spieler(100, "Test");
+         karten = new Karten();
     }
 
     @Test
@@ -47,44 +51,38 @@ public class SpielregelnTest {
 
     @Test
     public void isAllowToPullACardPlayerTest(){
-        Karte[] erhalteneKarten = {new Karte(5, "5"), new Karte(6, "6")};
-        Spieler spieler = new Spieler(erhalteneKarten);
+        spieler.setErhalteneKarten(karten.getKartenTest());
         Assert.assertTrue(regeln.isAllowToPullACardPlayer(spieler, new Karten()));
     }
 
     @Test
     public void isNotAllowToPullACardPlayerTest(){
-        Karte[] erhalteneKarten = {new Karte(10, "10"), new Karte(9, "9"), new Karte(10, "10")};
-        Spieler spieler = new Spieler(erhalteneKarten);
+        spieler.setErhalteneKarten(karten.getKarten());
         Assert.assertFalse(regeln.isAllowToPullACardPlayer(spieler, new Karten()));
     }
 
     @Test
     public void isKartenWertUnter21Test(){
-        Karte[] erhalteneKarten = {new Karte(7, "7"), new Karte(7, "7")};
-        Karten karten = new Karten();
-        Assert.assertTrue(regeln.isKartenWertUnter21(erhalteneKarten, karten));
+        spieler.setErhalteneKarten(karten.getKartenTest());
+        Assert.assertTrue(regeln.isKartenWertUnter21(spieler.getErhalteneKarten(), karten));
     }
 
     @Test
     public void isNotKartenWertUnter21Test(){
-        Karte[] erhalteneKarten = {new Karte(10, "Bube"), new Karte(9, "9"), new Karte(10, "Bube")};
-        Karten karten = new Karten();
-        Assert.assertFalse(regeln.isKartenWertUnter21(erhalteneKarten, karten));
+        spieler.setErhalteneKarten(karten.getKarten());
+        Assert.assertFalse(regeln.isKartenWertUnter21(spieler.getErhalteneKarten(), karten));
     }
 
     @Test
     public void isKartenWertUnter17Test(){
-        Karte[] erhalteneKarten = {new Karte(5, "5"), new Karte(6, "6")};
-        Karten karten = new Karten();
-        Assert.assertTrue(regeln.isKartenWertUnter17(erhalteneKarten, karten));
+        spieler.setErhalteneKarten(karten.getKartenTest());
+        Assert.assertTrue(regeln.isKartenWertUnter17(spieler.getErhalteneKarten(), karten));
     }
 
     @Test
     public void isNotKartenWertUnter17Test(){
-        Karte[] erhalteneKarten = {new Karte(9, "9"), new Karte(9, "9")};
-        Karten karten = new Karten();
-        Assert.assertFalse(regeln.isKartenWertUnter17(erhalteneKarten, karten));
+        spieler.setErhalteneKarten(karten.getKarten());
+        Assert.assertFalse(regeln.isKartenWertUnter17(spieler.getErhalteneKarten(), karten));
     }
 
 }

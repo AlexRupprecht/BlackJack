@@ -54,4 +54,11 @@ public class Spielregeln {
     public boolean isKartenWertUnter17(Karte[] gezogeneKarten, Karten karten){
         return karten.errechneKartenWertCroupier(gezogeneKarten) < 17;
     }
+
+    public boolean isTripleSven(Karte[] gezogeneKarten, Karten karten){
+        return karten.isTripleSevenVorhanden(gezogeneKarten);
+    }
+    public boolean isAllowToDoppel(int anzahlRunden){
+        return anzahlRunden == 2;
+    }
 }

@@ -85,4 +85,22 @@ public class SpielregelnTest {
         Assert.assertFalse(regeln.isKartenWertUnter17(spieler.getErhalteneKarten(), karten));
     }
 
+    @Test
+    public void isTripleSvenTest(){
+        spieler.setErhalteneKarten(karten.getKartenTripleTest());
+        Assert.assertTrue(regeln.isTripleSven(spieler.getErhalteneKarten(), karten));
+    }
+
+    @Test
+    public void isNotTripleSvenTest(){
+        spieler.setErhalteneKarten(karten.getKartenTest());
+        Assert.assertFalse(regeln.isTripleSven(spieler.getErhalteneKarten(), karten));
+    }
+
+    @Test
+    public void isAllowToDoppel(){ Assert.assertTrue(regeln.isAllowToDoppel(2)); }
+
+    @Test
+    public void isNotAllowToDoppel(){ Assert.assertFalse(regeln.isAllowToDoppel(3)); }
+
 }

@@ -4,11 +4,12 @@ public class Spieler {
 
     private double kontostand;
     private double gewinn = 0;
-    private String name;
+    private final String name;
     private Karte[] erhalteneKarten;
     private double gestezterWert;
     private boolean ausgeschieden = false;
     private boolean gewonnen = false;
+    private boolean verdoppelt = false;
 
     public Spieler(double kontostand, String name){
         this.kontostand = kontostand;
@@ -19,10 +20,10 @@ public class Spieler {
         for(Spieler spieler : spielerArray){
             spieler.setAusgeschieden(false);
             spieler.setGewonnen(false);
+            spieler.setVerdoppelt(false);
         }
     }
 
-    public Spieler(Karte[] erhalteneKarten){ this.erhalteneKarten = erhalteneKarten; }
     public double getKontostand() {
         return kontostand;
     }
@@ -50,4 +51,6 @@ public class Spieler {
     public void setGestezterWert(double gestezterWert) {
         this.gestezterWert = gestezterWert;
     }
+    public void setVerdoppelt (boolean verdoppelt){ this.verdoppelt = verdoppelt; }
+    public boolean hasVerdoppelt() { return verdoppelt; }
 }

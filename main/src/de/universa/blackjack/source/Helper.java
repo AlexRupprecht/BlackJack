@@ -2,6 +2,7 @@ package de.universa.blackjack.source;
 
 import java.io.IOException;
 
+@SuppressWarnings("ALL")
 public class Helper {
 
     public static void cleanBildschrim(){

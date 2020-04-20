@@ -71,19 +71,26 @@ public class GameBase {
             boolean spielzugBeendet = false;
             int anzahlrundeSpieler = anzahlrunden;
             do{
+                anzahlrundeSpieler++;
                 if(getRegeln().isAllowToPullACardPlayer(spieler, getKarten())){
-                    if(entscheideKarteZiehen(spieler)){
-                        anzahlrundeSpieler++;
+                    String neueKarteZiehen = entscheideKarteZiehen(spieler, anzahlrunden);
+                    if(neueKarteZiehen.equalsIgnoreCase("h")){
                         teileKarteaus(spieler, anzahlrundeSpieler);
+                    }else if(neueKarteZiehen.equalsIgnoreCase("d")){
+                        teileKarteaus(spieler, anzahlrundeSpieler);
+                        spieler.setVerdoppelt(true);
+                        spielzugBeendet = true;
                     }else{
                         spielzugBeendet = true;
                     }
                 }else{
                     if(getKarten().errechneKartenWert(spieler.getErhalteneKarten()) == 21){
+                        alreadyWon(spieler);
                         if(anzahlrundeSpieler == 2){
                             blackJack(spieler);
-                        }else{
-                            alreadyWon(spieler);
+                        }
+                        if(getKarten().isTripleSevenVorhanden(spieler.getErhalteneKarten())){
+                            doppelMoney(spieler);
                         }
                     }else {
                         getKarten().gebeKartenaus(spieler);
@@ -110,7 +117,7 @@ public class GameBase {
                 }else if(!getRegeln().isKartenWertUnter17(getCroupier().getErhalteneKarten(), getKarten()) && anzahlrundeSpieler == 3){
                     spielzugBeendet = true;
                 }else{
-                    if(entscheideKarteZiehen(getCroupier())){
+                    if(entscheideKarteZiehen(getCroupier(), anzahlrundeSpieler).equalsIgnoreCase("h")){
                         teileKarteaus(getCroupier(), anzahlrundeSpieler);
                     }else{
                         spielzugBeendet = true;
@@ -142,9 +149,13 @@ public class GameBase {
     private void ermittleErgebnis(){
         for(Spieler spieler : getSpielerArray()){
             if(!spieler.isAusgeschieden()){
-                if(getKarten().errechneKartenWertCroupier(getCroupier().getErhalteneKarten()) > 21){
+                if(getKarten().errechneKartenWertCroupier(getCroupier().getErhalteneKarten()) > 21 && getKarten().errechneKartenWert(spieler.getErhalteneKarten())<= 21){
                     alreadyWon(spieler);
-                }else if(getKarten().errechneKartenWertCroupier(getCroupier().getErhalteneKarten()) < getKarten().errechneKartenWert(spieler.getErhalteneKarten())){
+                }else if(getKarten().errechneKartenWertCroupier(getCroupier().getErhalteneKarten()) < getKarten().errechneKartenWert(spieler.getErhalteneKarten()) &&
+                        getKarten().errechneKartenWert(spieler.getErhalteneKarten())<= 21){
+                    if(spieler.hasVerdoppelt()){
+                        doppelMoney(spieler);
+                    }
                     alreadyWon(spieler);
                 }
             }
@@ -179,17 +190,23 @@ public class GameBase {
     private boolean habenAlleSpielerVerloren(){
         boolean habenAlleSpielerVerloren = true;
         for(Spieler spieler : getSpielerArray()){
-            if(spieler.getKontostand() > 0 && habenAlleSpielerVerloren){
+            if (spieler.getKontostand() > 0 && habenAlleSpielerVerloren) {
                 habenAlleSpielerVerloren = false;
+                break;
             }
         }
         return habenAlleSpielerVerloren;
     }
 
     private void blackJack(Spieler spieler){
-        alreadyWon(spieler);
+        doppelMoney(spieler);
         System.out.println("Winner Winner Chicken Dinner!");
     }
+    private void doppelMoney(Spieler spieler){
+        spieler.setKontostand(spieler.getKontostand() + spieler.getGestezterWert());
+        spieler.setGewinn(spieler.getGewinn() + spieler.getGestezterWert());
+    }
+
     private void alreadyWon(Spieler spieler){
         spieler.setKontostand(spieler.getKontostand() + spieler.getGestezterWert());
         spieler.setGewinn(spieler.getGewinn() + spieler.getGestezterWert());
@@ -203,25 +220,38 @@ public class GameBase {
     }
 
     //Eingaben
-    private boolean entscheideKarteZiehen(Spieler spieler){
+    private String entscheideKarteZiehen(Spieler spieler, int anzahlrunden){
         boolean eingabeKorrekt = true;
         String eingabe;
-        do{
-            if(!eingabeKorrekt){
-                System.out.println("Es ist nur \"H\" oder \"S\" erlaubt!");
+        do {
+            if (!eingabeKorrekt) {
+                if (!spieler.equals(croupier)) {
+                    System.out.println("Es ist nur \"H\", \"D\" oder \"S\" erlaubt!");
+                } else {
+                    System.out.println("Es ist nur \"H\" oder \"S\" erlaubt!");
+                }
             }
-            if(!spieler.equals(getCroupier())) {
+            if (!spieler.equals(getCroupier())) {
                 getKarten().gebeKartenaus(getCroupier());
             }
             getKarten().gebeKartenaus(spieler);
             gebeKartenWertaus(spieler);
             System.out.println();
-            System.out.println("Möchtest du noch einmal ziehen[h] oder es sein lassen[s]:");
+            if(!spieler.equals(croupier)) {
+                System.out.println("Möchtest du noch einmal ziehen[H], verdoppelen[D] oder es sein lassen[S]:");
+            }else{
+                System.out.println("Möchtest du noch einmal ziehen[H] oder es sein lassen[S]:");
+            }
             eingabe = scan.next();
-            eingabeKorrekt = eingabe.equalsIgnoreCase("h") || eingabe.equalsIgnoreCase("s");
-
+            eingabeKorrekt = eingabe.equalsIgnoreCase("h") || eingabe.equalsIgnoreCase("s") || eingabe.equalsIgnoreCase("d");
+            if (eingabe.equalsIgnoreCase("d") && !spieler.equals(croupier)) {
+                eingabeKorrekt = getRegeln().isAllowToDoppel(anzahlrunden);
+            }
+            if (eingabe.equalsIgnoreCase("d") && spieler.equals(croupier)){
+                eingabeKorrekt = false;
+            }
         }while(!eingabeKorrekt);
-        return eingabe.equalsIgnoreCase("h");
+        return eingabe;
     }
 
     private void spieleinsaetzesetzen(){
@@ -267,9 +297,6 @@ public class GameBase {
     }
 
     //Getter und Setter
-    private int getKarteID(){
-        return (int) ((Math.random() * 12) + 1);
-    }
     public double getMaxSpieleinsatzproBox() {
         return maxSpieleinsatzproBox;
     }

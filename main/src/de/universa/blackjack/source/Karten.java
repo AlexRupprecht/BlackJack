@@ -11,9 +11,10 @@ public class Karten {
                                 new Karte(8, "8"), new Karte(9, "9"), new Karte(10, "10"),
                                 new Karte(10, "Bube"), new Karte(10, "Dame"), new Karte(10, "König"),
                                 new Karte(11, "Ass")};
-    private List<Karte> kartenDeck = new ArrayList<>();
+    private final List<Karte> kartenDeck = new ArrayList<>();
 
-    private Karte[] kartenTest = {new Karte(7, "7"), new Karte(7, "7")};
+    private final Karte[] kartenTest = {new Karte(7, "7"), new Karte(7, "7")};
+    private final Karte[] kartenTripleTest = {new Karte(7, "7"), new Karte(7, "7"), new Karte(7, "7")};
 
     public Karten(){ }
 
@@ -81,6 +82,17 @@ public class Karten {
         return kartenWert;
     }
 
+    public boolean isTripleSevenVorhanden(Karte[] gezogenKartenIndex){
+        int counter = 0;
+        for(Karte karte : gezogenKartenIndex){
+            if(karte.getWert() == 7){
+                counter++;
+            }
+        }
+        return counter == 3;
+    }
+
+
     public Karte getNextKarte(){
         Karte nextKarte = getKartenDeck().get(0);
         getKartenDeck().remove(0);
@@ -89,6 +101,7 @@ public class Karten {
     public Karte[] getKarten(){ return karten; }
     public List<Karte> getKartenDeck() { return kartenDeck; }
     public Karte[] getKartenTest() { return kartenTest; }
+    public Karte[] getKartenTripleTest() { return kartenTripleTest; }
 }
 class Karte {
     private final String name;
